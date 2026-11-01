@@ -1,0 +1,118 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Verbinden met UniFi Protect",
+        "description": "Gebruik het adres van de console op je netwerk en een API-sleutel uit UniFi OS onder Control Plane → Integrations (een Protect-only sleutel volstaat).",
+        "data": {
+          "host": "Adres van de console",
+          "api_key": "API-sleutel",
+          "verify_ssl": "SSL-certificaat controleren"
+        },
+        "data_description": {
+          "verify_ssl": "Laat uit voor het standaard zelfgetekende certificaat van de console."
+        }
+      },
+      "cameras": {
+        "title": "Deurbellen",
+        "description": "Kies de deurbellen met een scherm.",
+        "data": {
+          "cameras": "Deurbellen"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Console niet bereikbaar.",
+      "invalid_auth": "De API-sleutel is geweigerd."
+    },
+    "abort": {
+      "already_configured": "Deze console is al ingesteld."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opties UniFi Doorbell Display",
+        "data": {
+          "scan_interval": "Verversingsinterval (seconden)",
+          "preview_folder": "Voorbeeldmap",
+          "default_image": "Standaardafbeelding"
+        },
+        "data_description": {
+          "preview_folder": "Map met een afbeelding per geüploade afbeelding, genoemd zoals de upload (bv. cat_halloween_small.gif). Moet in allowlist_external_dirs staan tenzij ze in de config-map zit.",
+          "default_image": "Afbeelding als er geen voorbeeld is (bv. de standaardanimatie). Leeg = ingebouwde placeholder."
+        }
+      }
+    }
+  },
+  "entity": {
+    "select": {
+      "display": {
+        "name": "Schermbericht"
+      }
+    },
+    "sensor": {
+      "current_display": {
+        "name": "Huidig scherm"
+      },
+      "resets_at": {
+        "name": "Scherm reset om"
+      },
+      "available_images": {
+        "name": "Beschikbare afbeeldingen"
+      }
+    },
+    "binary_sensor": {
+      "showing_default": {
+        "name": "Toont standaard"
+      }
+    },
+    "image": {
+      "current_display_image": {
+        "name": "Huidige schermafbeelding"
+      }
+    }
+  },
+  "services": {
+    "set_image": {
+      "name": "Afbeelding instellen",
+      "description": "Toon een geüploade afbeelding op het deurbelscherm.",
+      "fields": {
+        "image": {
+          "name": "Afbeelding",
+          "description": "Naam of id van een geüploade afbeelding (zie de sensor Beschikbare afbeeldingen)."
+        },
+        "duration": {
+          "name": "Duur",
+          "description": "Zo lang tonen, daarna terugvallen. Leeg = blijft staan."
+        },
+        "then": {
+          "name": "Daarna",
+          "description": "Afbeelding die na de duur getoond wordt in plaats van de standaardanimatie."
+        }
+      }
+    },
+    "set_text": {
+      "name": "Tekst instellen",
+      "description": "Toon een tekst op het deurbelscherm.",
+      "fields": {
+        "text": {
+          "name": "Tekst",
+          "description": "Het bericht."
+        },
+        "duration": {
+          "name": "Duur",
+          "description": "Zo lang tonen, daarna terugvallen. Leeg = blijft staan."
+        },
+        "then": {
+          "name": "Daarna",
+          "description": "Afbeelding die na de duur getoond wordt in plaats van de standaardanimatie."
+        }
+      }
+    },
+    "reset_display": {
+      "name": "Scherm resetten",
+      "description": "Terug naar het standaardbericht van UniFi Protect."
+    }
+  }
+}

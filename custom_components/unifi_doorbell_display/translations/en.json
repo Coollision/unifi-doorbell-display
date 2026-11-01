@@ -1,0 +1,118 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to UniFi Protect",
+        "description": "Use the console's address on your network and an API key created in UniFi OS under Control Plane → Integrations (a Protect-only key is enough).",
+        "data": {
+          "host": "Console address",
+          "api_key": "API key",
+          "verify_ssl": "Verify SSL certificate"
+        },
+        "data_description": {
+          "verify_ssl": "Leave off for the console's default self-signed certificate."
+        }
+      },
+      "cameras": {
+        "title": "Doorbells",
+        "description": "Pick the doorbells with a screen.",
+        "data": {
+          "cameras": "Doorbells"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Could not reach the console.",
+      "invalid_auth": "The API key was rejected."
+    },
+    "abort": {
+      "already_configured": "This console is already set up."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "UniFi Doorbell Display options",
+        "data": {
+          "scan_interval": "Update interval (seconds)",
+          "preview_folder": "Preview folder",
+          "default_image": "Default picture"
+        },
+        "data_description": {
+          "preview_folder": "Folder with a picture per uploaded image, named like the upload (for example cat_halloween_small.gif). Must be in allowlist_external_dirs unless it is inside the config folder.",
+          "default_image": "Picture shown when no preview is available (for example the default animation). Leave empty for a built-in placeholder."
+        }
+      }
+    }
+  },
+  "entity": {
+    "select": {
+      "display": {
+        "name": "Display message"
+      }
+    },
+    "sensor": {
+      "current_display": {
+        "name": "Current display"
+      },
+      "resets_at": {
+        "name": "Display resets at"
+      },
+      "available_images": {
+        "name": "Available images"
+      }
+    },
+    "binary_sensor": {
+      "showing_default": {
+        "name": "Showing default"
+      }
+    },
+    "image": {
+      "current_display_image": {
+        "name": "Current display image"
+      }
+    }
+  },
+  "services": {
+    "set_image": {
+      "name": "Set image",
+      "description": "Show an uploaded image on the doorbell screen.",
+      "fields": {
+        "image": {
+          "name": "Image",
+          "description": "Name or id of an uploaded image (see the Available images sensor)."
+        },
+        "duration": {
+          "name": "Duration",
+          "description": "Show it for this long, then fall back. Leave empty to keep it."
+        },
+        "then": {
+          "name": "Then",
+          "description": "Image to show after the duration instead of the default animation."
+        }
+      }
+    },
+    "set_text": {
+      "name": "Set text",
+      "description": "Show a text on the doorbell screen.",
+      "fields": {
+        "text": {
+          "name": "Text",
+          "description": "The message."
+        },
+        "duration": {
+          "name": "Duration",
+          "description": "Show it for this long, then fall back. Leave empty to keep it."
+        },
+        "then": {
+          "name": "Then",
+          "description": "Image to show after the duration instead of the default animation."
+        }
+      }
+    },
+    "reset_display": {
+      "name": "Reset display",
+      "description": "Go back to the default message of UniFi Protect."
+    }
+  }
+}
