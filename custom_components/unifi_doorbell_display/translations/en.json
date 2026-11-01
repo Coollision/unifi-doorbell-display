@@ -39,8 +39,8 @@
           "default_image": "Default picture"
         },
         "data_description": {
-          "preview_folder": "Folder with a picture per uploaded image, named like the upload (for example cat_halloween_small.gif). Must be in allowlist_external_dirs unless it is inside the config folder.",
-          "default_image": "Picture shown when no preview is available (for example the default animation). Leave empty for a built-in placeholder."
+          "preview_folder": "Folder with a picture per uploaded image, named like the upload (for example cat_halloween_small.gif). Leave empty to use the unifi_doorbell_display folder in your config folder (created on setup).",
+          "default_image": "Picture for the default message. Leave empty to use a default.<ext> file in the preview folder, otherwise a card with the name is drawn."
         }
       }
     }

@@ -25,3 +25,19 @@ OPTION_LEAVE_PACKAGE = "Leave package at door"
 OPTION_DO_NOT_DISTURB = "Do not disturb"
 
 STORAGE_VERSION = 1
+
+# Folder (inside the config folder) that is created on setup and searched for preview pictures
+# when no other folder is configured.
+PREVIEW_DIR_NAME = "unifi_doorbell_display"
+PREVIEW_README = """UniFi Doorbell Display - preview pictures
+
+The UniFi Protect API shows which image is on the doorbell screen but does not hand out the
+uploaded GIFs themselves, so the "Current display image" entity looks here for pictures:
+
+  * one file per image you uploaded to Protect, named like the upload,
+    for example cat_halloween_small.gif  (any of gif, png, webp, avif, jpg)
+  * default.<ext>  - shown for Protect's default message (for example default.avif)
+
+Anything that has no file here is drawn as a card with the name of what is showing.
+You can use another folder under Settings > Devices & services > UniFi Doorbell Display > Configure.
+"""
