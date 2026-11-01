@@ -8,8 +8,10 @@ there is no preview, or the screen shows the default/text, the default picture
 
 from __future__ import annotations
 
+import io
 import logging
 from pathlib import Path
+import textwrap
 
 from homeassistant.components.image import ImageEntity
 from homeassistant.core import HomeAssistant
@@ -17,10 +19,10 @@ from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.util import dt as dt_util
 
 from . import DoorbellConfigEntry
-from .const import CONF_DEFAULT_IMAGE, CONF_PREVIEW_FOLDER
+from .const import CONF_DEFAULT_IMAGE, CONF_PREVIEW_FOLDER, OPTION_DEFAULT, PREVIEW_DIR_NAME
 from .coordinator import DoorbellCoordinator
 from .entity import DoorbellEntity
-from .util import KIND_IMAGE, content_type, find_preview
+from .util import KIND_DEFAULT, KIND_DO_NOT_DISTURB, KIND_IMAGE, KIND_LEAVE_PACKAGE, KIND_TEXT, content_type, find_preview
 
 _LOGGER = logging.getLogger(__name__)
 PARALLEL_UPDATES = 0
@@ -77,27 +79,77 @@ class CurrentDisplayImage(DoorbellEntity, ImageEntity):
         _LOGGER.warning("Path %s is not allowed; add it to allowlist_external_dirs", path)
         return False
 
-    def _pick_file(self) -> Path:
-        """Runs in the executor: the preview for the current image, else the default."""
+    def _label(self) -> str:
+        """Name of what is showing, for the generated card."""
         doorbell = self.doorbell
-        folder = self._entry.options.get(CONF_PREVIEW_FOLDER)
-        if doorbell and doorbell.message.kind == KIND_IMAGE and folder and self._path_allowed(folder):
+        if doorbell is None:
+            return OPTION_DEFAULT
+        msg = doorbell.message
+        if msg.kind == KIND_IMAGE:
+            image = self.coordinator.data.image_by_id(msg.text)
+            return image.name if image else "Custom image"
+        if msg.kind == KIND_TEXT:
+            return msg.text or ""
+        if msg.kind == KIND_LEAVE_PACKAGE:
+            return "Leave package at door"
+        if msg.kind == KIND_DO_NOT_DISTURB:
+            return "Do not disturb"
+        return OPTION_DEFAULT
+
+    def _pick_file(self) -> Path | None:
+        """Runs in the executor: the picture for the current display, or None to draw a card."""
+        doorbell = self.doorbell
+        configured = self._entry.options.get(CONF_PREVIEW_FOLDER)
+        folder = configured or self.hass.config.path(PREVIEW_DIR_NAME)
+        directory = Path(folder)
+        if not (self._path_allowed(folder) and directory.is_dir()):
+            directory = None
+        names = [p.name for p in directory.iterdir()] if directory else []
+        if doorbell and doorbell.message.kind == KIND_IMAGE and directory:
             image = self.coordinator.data.image_by_id(doorbell.message.text)
-            directory = Path(folder)
-            if image and directory.is_dir():
-                match = find_preview([p.name for p in directory.iterdir()], image.original)
-                if match:
-                    return directory / match
-        default = self._entry.options.get(CONF_DEFAULT_IMAGE)
-        if default and self._path_allowed(default) and Path(default).is_file():
-            return Path(default)
-        return PLACEHOLDER
+            if image and (match := find_preview(names, image.original)):
+                return directory / match
+        elif doorbell and doorbell.message.kind == KIND_DEFAULT:
+            default = self._entry.options.get(CONF_DEFAULT_IMAGE)
+            if default and self._path_allowed(default) and Path(default).is_file():
+                return Path(default)
+            if directory and (match := find_preview(names, "default")):
+                return directory / match
+        return None
 
     async def async_image(self) -> bytes | None:
         def _read() -> tuple[bytes, str]:
             path = self._pick_file()
-            return path.read_bytes(), content_type(path.name)
+            if path is not None:
+                return path.read_bytes(), content_type(path.name)
+            return _label_card(self._label()), "image/png"
 
         data, ctype = await self.hass.async_add_executor_job(_read)
         self._attr_content_type = ctype
         return data
+
+
+def _label_card(label: str) -> bytes:
+    """A 240x240 card with the name of what is showing (falls back to a static picture)."""
+    try:
+        from PIL import Image, ImageDraw, ImageFont, ImageOps  # Pillow ships with Home Assistant
+
+        card = ImageOps.colorize(
+            ImageOps.invert(Image.radial_gradient("L").resize((240, 240))),
+            black="#05256f",
+            white="#3cc3f2",
+        )
+        font = ImageFont.load_default(size=26)
+        draw = ImageDraw.Draw(card)
+        lines = textwrap.wrap(label, 14)[:5] or [""]
+        line_h = 34
+        y = 120 - len(lines) * line_h // 2
+        for line in lines:
+            draw.text((120, y), line, font=font, fill="white", anchor="mt")
+            y += line_h
+        out = io.BytesIO()
+        card.save(out, format="PNG")
+        return out.getvalue()
+    except Exception:  # noqa: BLE001 - never let a cosmetic card break the entity
+        _LOGGER.debug("Could not draw the label card", exc_info=True)
+        return PLACEHOLDER.read_bytes()

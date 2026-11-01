@@ -53,7 +53,11 @@ data:
 
 ## Previews
 
-The Protect API does not hand out the uploaded GIFs, so the image entity uses pictures you provide: under **Configure** set a **Preview folder** with one file per uploaded image, named like the upload (an upload called `cat_halloween_small.gif` is matched by `cat_halloween_small.gif`), and optionally a **Default picture** for when nothing matches or the screen shows the default or a text. Without these, a built-in placeholder is shown. Anything inside your config folder works; paths elsewhere must be listed in `allowlist_external_dirs`. Animated GIFs (and AVIF) are served as they are.
+The Protect API tells us *which* image is on the screen but does not hand out the uploaded GIFs, so the image entity looks for pictures in a folder:
+
+- On setup the integration creates **`<config>/unifi_doorbell_display/`** (with a short `README.txt`). Drop one file per uploaded image in there, **named like the upload** (an upload called `cat_halloween_small.gif` is matched by `cat_halloween_small.gif`; gif, png, webp, avif and jpg all work and animated files stay animated), and optionally a `default.<ext>` for Protect's default message.
+- Anything without a file is drawn as a card with the **name of what is showing** (for example "cat halloween small" or "Default message"), so the entity is never an unexplained picture.
+- Under **Configure** you can point to another folder or a specific default picture instead. Anything inside your config folder works; other paths must be listed in `allowlist_external_dirs`.
 
 ## Notes
 

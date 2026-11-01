@@ -39,8 +39,8 @@
           "default_image": "Standaardafbeelding"
         },
         "data_description": {
-          "preview_folder": "Map met een afbeelding per geüploade afbeelding, genoemd zoals de upload (bv. cat_halloween_small.gif). Moet in allowlist_external_dirs staan tenzij ze in de config-map zit.",
-          "default_image": "Afbeelding als er geen voorbeeld is (bv. de standaardanimatie). Leeg = ingebouwde placeholder."
+          "preview_folder": "Map met een afbeelding per geüploade afbeelding, genoemd zoals de upload (bv. cat_halloween_small.gif). Leeg = de map unifi_doorbell_display in je config-map (wordt bij het instellen aangemaakt).",
+          "default_image": "Afbeelding voor het standaardbericht. Leeg = een bestand default.<ext> in de voorbeeldmap, anders een kaartje met de naam."
         }
       }
     }
