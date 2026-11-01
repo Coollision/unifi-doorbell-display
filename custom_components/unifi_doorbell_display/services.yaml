@@ -1,0 +1,41 @@
+set_image:
+  target:
+    entity:
+      integration: unifi_doorbell_display
+      domain: select
+  fields:
+    image:
+      required: true
+      example: cat halloween small
+      selector:
+        text:
+    duration:
+      selector:
+        duration:
+    then:
+      example: cat hello small
+      selector:
+        text:
+set_text:
+  target:
+    entity:
+      integration: unifi_doorbell_display
+      domain: select
+  fields:
+    text:
+      required: true
+      example: Welcome
+      selector:
+        text:
+    duration:
+      selector:
+        duration:
+    then:
+      example: cat hello small
+      selector:
+        text:
+reset_display:
+  target:
+    entity:
+      integration: unifi_doorbell_display
+      domain: select
