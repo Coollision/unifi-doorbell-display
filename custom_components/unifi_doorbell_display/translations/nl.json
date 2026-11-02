@@ -40,7 +40,7 @@
         },
         "data_description": {
           "preview_folder": "Map met een afbeelding per geüploade afbeelding, genoemd zoals de upload (bv. cat_halloween_small.gif). Leeg = de map unifi_doorbell_display in je config-map (wordt bij het instellen aangemaakt).",
-          "default_image": "Afbeelding voor het standaardbericht. Leeg = een bestand default.<ext> in de voorbeeldmap, anders een kaartje met de naam."
+          "default_image": "Afbeelding voor het standaardbericht. Leeg = een bestand met de naam default (elk afbeeldingstype) in de voorbeeldmap, anders een kaartje met de naam."
         }
       }
     }
