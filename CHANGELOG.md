@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.0](https://github.com/Coollision/unifi-doorbell-display/compare/v0.3.0...v1.0.0) (2026-11-09)
+
+
+### Bug Fixes
+
+* add reauth flow for rejected API keys ([#4](https://github.com/Coollision/unifi-doorbell-display/issues/4)) ([2e6ec9a](https://github.com/Coollision/unifi-doorbell-display/commit/2e6ec9ac5a621701f8995e41caaddb0c739933df))
+
+
+### Miscellaneous Chores
+
+* release 1.0.0 ([2f4c08c](https://github.com/Coollision/unifi-doorbell-display/commit/2f4c08c5c6c580b4fbce16860e863e5fe8b2aca9))
+
 ## [0.3.0](https://github.com/Coollision/unifi-doorbell-display/compare/v0.2.0...v0.3.0) (2026-11-02)
 
 
