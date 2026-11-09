@@ -9,7 +9,7 @@ import time
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import CALLBACK_TYPE, HomeAssistant, callback
-from homeassistant.exceptions import HomeAssistantError
+from homeassistant.exceptions import ConfigEntryAuthFailed, HomeAssistantError
 from homeassistant.helpers.event import async_track_point_in_utc_time
 from homeassistant.helpers.storage import Store
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
@@ -101,8 +101,7 @@ class DoorbellCoordinator(DataUpdateCoordinator[CoordinatorData]):
             cameras = await self.api.cameras()
             files = await self.api.files()
         except ApiAuthError as err:
-            self.config_entry.async_start_reauth(self.hass)
-            raise UpdateFailed(f"API key rejected: {err}") from err
+            raise ConfigEntryAuthFailed(f"API key rejected: {err}") from err
         except ApiError as err:
             raise UpdateFailed(str(err)) from err
 
