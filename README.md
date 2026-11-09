@@ -31,9 +31,9 @@ See and control **the screen of your UniFi Protect doorbell** (G4 Doorbell Pro a
 
 ## Installation
 
-1. [![Open your Home Assistant instance and open this repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Coollision&repository=unifi-doorbell-display&category=integration)
-   adds this repository to HACS as an **Integration** and opens it. Click **Download**, then restart Home Assistant.
-   (Manually: HACS → ⋮ → **Custom repositories** → `https://github.com/Coollision/unifi-doorbell-display`, type **Integration**.)
+1. Open HACS, search for **UniFi Doorbell Display**, click **Download**, then restart Home Assistant.
+   (Not listed yet? [![Open your Home Assistant instance and open this repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Coollision&repository=unifi-doorbell-display&category=integration)
+   adds it as a custom repository of type **Integration**, or add `https://github.com/Coollision/unifi-doorbell-display` manually via HACS → ⋮ → **Custom repositories**.)
 2. [![Open your Home Assistant instance and start setting up a new integration.](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=unifi_doorbell_display)
    starts the setup. Enter the console address and the API key, and pick your doorbells.
 
