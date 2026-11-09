@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from typing import Any
 
 import voluptuous as vol
@@ -72,6 +73,43 @@ class UnifiDoorbellDisplayFlow(ConfigFlow, domain=DOMAIN):
                     vol.Required(CONF_VERIFY_SSL, default=False): bool,
                 }
             ),
+            errors=errors,
+        )
+
+    async def async_step_reauth(self, entry_data: Mapping[str, Any]) -> ConfigFlowResult:
+        return await self.async_step_reauth_confirm()
+
+    async def async_step_reauth_confirm(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        errors: dict[str, str] = {}
+        reauth_entry = self._get_reauth_entry()
+        if user_input is not None:
+            api = ProtectApi(
+                async_create_clientsession(self.hass, verify_ssl=reauth_entry.data[CONF_VERIFY_SSL]),
+                reauth_entry.data[CONF_HOST],
+                user_input[CONF_API_KEY],
+            )
+            try:
+                await api.meta()
+            except ApiAuthError:
+                errors["base"] = "invalid_auth"
+            except ApiError:
+                errors["base"] = "cannot_connect"
+            else:
+                return self.async_update_reload_and_abort(
+                    reauth_entry, data_updates={CONF_API_KEY: user_input[CONF_API_KEY]}
+                )
+        return self.async_show_form(
+            step_id="reauth_confirm",
+            data_schema=vol.Schema(
+                {
+                    vol.Required(CONF_API_KEY): selector.TextSelector(
+                        selector.TextSelectorConfig(type=selector.TextSelectorType.PASSWORD)
+                    ),
+                }
+            ),
+            description_placeholders={"host": reauth_entry.data[CONF_HOST]},
             errors=errors,
         )
 
