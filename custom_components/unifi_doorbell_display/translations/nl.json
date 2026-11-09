@@ -19,6 +19,13 @@
         "data": {
           "cameras": "Deurbellen"
         }
+      },
+      "reauth_confirm": {
+        "title": "Opnieuw verbinden met UniFi Protect",
+        "description": "De API-sleutel voor {host} is geweigerd, waarschijnlijk omdat hij vernieuwd of ingetrokken is. Maak een nieuwe API-sleutel aan in UniFi OS onder Control Plane → Integrations en vul die hier in.",
+        "data": {
+          "api_key": "API-sleutel"
+        }
       }
     },
     "error": {
@@ -26,7 +33,8 @@
       "invalid_auth": "De API-sleutel is geweigerd."
     },
     "abort": {
-      "already_configured": "Deze console is al ingesteld."
+      "already_configured": "Deze console is al ingesteld.",
+      "reauth_successful": "Opnieuw verbinden is gelukt."
     }
   },
   "options": {

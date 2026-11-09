@@ -19,6 +19,13 @@
         "data": {
           "cameras": "Doorbells"
         }
+      },
+      "reauth_confirm": {
+        "title": "Reauthenticate UniFi Protect",
+        "description": "The API key for {host} was rejected, probably because it was rotated or revoked. Create a new API key in UniFi OS under Control Plane → Integrations and enter it here.",
+        "data": {
+          "api_key": "API key"
+        }
       }
     },
     "error": {
@@ -26,7 +33,8 @@
       "invalid_auth": "The API key was rejected."
     },
     "abort": {
-      "already_configured": "This console is already set up."
+      "already_configured": "This console is already set up.",
+      "reauth_successful": "Re-authentication was successful."
     }
   },
   "options": {
